@@ -1,0 +1,35 @@
+# docker-compose.yml
+
+services:
+  deps:
+    image: node
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    working_dir: /app
+    command: ["npm", "install"]
+    profiles:
+      - run
+  
+  app:
+    image: node
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    working_dir: /app
+    depends_on:
+      - mongodb
+    command: ["./wait-for-it.sh", "mongodb:27017", "--", "npm", "run", "dev"]
+    environment:
+      - MONGODB_URL=mongodb://mongodb
+    
+  mongodb:
+    image: mongo
+    volumes:
+      - data:/data/db
+
+volumes:
+  data:
+  node_modules:
