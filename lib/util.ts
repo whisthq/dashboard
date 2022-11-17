@@ -7,8 +7,8 @@
 import { ManagementClient } from 'auth0'
 import { MongoClient } from 'mongodb'
 
-let _auth0
-let _mongo
+let _auth0: ManagementClient
+let _mongo: Promise<MongoClient>
 
 export function auth0() {
   if (_auth0 === undefined) {

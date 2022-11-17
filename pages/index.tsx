@@ -4,7 +4,8 @@
  *
  */
 
-import type { OrganizationMember } from 'auth0'
+import type { OrganizationMember, Role } from 'auth0'
+import type { InferGetServerSidePropsType } from 'next'
 
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import Error from 'next/error'
@@ -12,7 +13,11 @@ import Image from 'next/image'
 
 import { auth0, mongo } from '../lib/util'
 
-export default function Dashboard({ authorized, policy, members }) {
+export default function Dashboard({
+  authorized,
+  policy,
+  members,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   if (authorized) {
     return (
       <div>
@@ -38,7 +43,12 @@ export default function Dashboard({ authorized, policy, members }) {
             {members.map(({ email, name, picture, roles, user_id: userId }) => (
               <tr key={userId}>
                 <td>
-                  <Image src={picture} alt={name} width={48} height={48} />
+                  <Image
+                    src={picture ?? ''}
+                    alt={name ?? ''}
+                    width={48}
+                    height={48}
+                  />
                 </td>
                 <td>{name}</td>
                 <td>{email}</td>
@@ -86,7 +96,7 @@ export const getServerSideProps = withPageAuthRequired({
     )
     const withRoles = await Promise.all(
       members.map(async (member) => {
-        const roles = await new Promise(async (resolve, reject) => {
+        const roles = await new Promise<Role[]>(async (resolve, reject) => {
           if (member.user_id) {
             await auth0().organizations.getMemberRoles(
               {
