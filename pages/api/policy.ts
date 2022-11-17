@@ -9,7 +9,7 @@ import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0'
 import { mongo } from '../../lib/util'
 
 export default withApiAuthRequired(async (req, res) => {
-  const db = await mongo
+  const db = await mongo()
   const session = getSession(req, res)
 
   switch (req.method) {

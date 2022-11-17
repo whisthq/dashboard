@@ -61,7 +61,7 @@ export default function Dashboard({ authorized, policy, members }) {
 
 export const getServerSideProps = withPageAuthRequired({
   getServerSideProps: async (ctx) => {
-    const db = await mongo
+    const db = await mongo()
     const session = getSession(ctx.req, ctx.res)
 
     // TODO(owen): Make this check robust against admin as a substring.
@@ -75,7 +75,7 @@ export const getServerSideProps = withPageAuthRequired({
     const policy = (await policies.findOne({ _id: orgId })) ?? {}
     const members = await new Promise<OrganizationMember[]>(
       (resolve, reject) => {
-        auth0.organizations.getMembers({ id: orgId }, (err, members) => {
+        auth0().organizations.getMembers({ id: orgId }, (err, members) => {
           if (!err) {
             resolve(members)
           } else {
@@ -88,7 +88,7 @@ export const getServerSideProps = withPageAuthRequired({
       members.map(async (member) => {
         const roles = await new Promise(async (resolve, reject) => {
           if (member.user_id) {
-            await auth0.organizations.getMemberRoles(
+            await auth0().organizations.getMemberRoles(
               {
                 id: orgId,
                 user_id: member.user_id,
