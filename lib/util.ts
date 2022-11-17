@@ -13,7 +13,7 @@ export const auth0 = new ManagementClient({
   domain: process.env.AUTH0_MACHINE_DOMAIN as string,
   clientId: process.env.AUTH0_MACHINE_CLIENT_ID as string,
   clientSecret: process.env.AUTH0_MACHINE_CLIENT_SECRET as string,
-  scope: 'read:organization_members'
+  scope: 'read:organization_members',
 })
 
 export const mongo = client.connect()

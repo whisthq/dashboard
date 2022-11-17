@@ -10,7 +10,7 @@ services:
     command: ["npm", "install"]
     profiles:
       - run
-  
+
   app:
     image: node
     ports:
@@ -24,7 +24,7 @@ services:
     command: ["./wait-for-it.sh", "mongodb:27017", "--", "npm", "run", "dev"]
     environment:
       - MONGODB_URL=mongodb://mongodb
-    
+
   mongodb:
     image: mongo
     volumes:
