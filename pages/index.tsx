@@ -74,7 +74,8 @@ export const getServerSideProps = withPageAuthRequired({
     const db = await mongo()
     const session = getSession(ctx.req, ctx.res)
 
-    // TODO(owen): Make this check robust against admin as a substring.
+    // TODO(owen): Make this check robust against admin being a substring of
+    // another scope.
     if (!session?.accessTokenScope?.includes('admin')) {
       ctx.res.statusCode = 403
       return { props: { authorized: false, policy: {}, members: [] } }
