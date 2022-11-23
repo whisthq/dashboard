@@ -1,6 +1,6 @@
 # Whist Enterprise Dashboard
 
-The Whist Enterprise Dashboard allows customer account administrators to manage their accounts.
+The Whist Enterprise Dashboard allows customer account administrators to manage their accounts and set policies for their employees using the Whist browser.
 
 ### Development
 
