@@ -6,12 +6,16 @@
 
 import { getSession } from '@auth0/nextjs-auth0'
 import { ObjectId } from 'mongodb'
-import { mongo } from '../../../lib/util.ts'
+import { mongo } from '../../../lib/util'
+import { NextApiRequest, NextApiResponse } from 'next'
 
 /**
  *
  */
-export default async function PolicyHandler(req, res) {
+export default async function PolicyHandler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { method, body } = req
   const { policyId } = req.query
 
@@ -53,21 +57,29 @@ export default async function PolicyHandler(req, res) {
   const policies = db.db('policies').collection('org_policies')
 
   switch (method) {
-    case 'GET':
-      const findResult = await policies.findOne({ _id: ObjectId(policyId) })
-      res.status(200).json({ policy: findResult })
-      break
     case 'PUT':
-      const updateResult = await policies.updateOne(
-        { _id: ObjectId(body.id) },
-        { $set: body.content }
-      )
-      res.status(200).json({ updated: updateResult })
+      try {
+        const updateResult = await policies.updateOne(
+          { _id: new ObjectId(body.id) },
+          { $set: body.content }
+        )
+        res.status(200).json({ updated: updateResult })
+      } catch (err) {
+        res.status(503).json({ updated: 0, error: err })
+      }
       break
+
     case 'DELETE':
-      const deleteResult = await policies.deleteMany({ _id: ObjectId(body.id) })
-      res.status(200).json({ deleted: deleteResult })
+      try {
+        const deleteResult = await policies.deleteMany({
+          _id: new ObjectId(body.id),
+        })
+        res.status(200).json({ deleted: deleteResult })
+      } catch (err) {
+        res.status(503).json({ deleted: 0, error: err })
+      }
       break
+
     default:
       res.status(405).json({ message: 'Not Allowed' })
       break

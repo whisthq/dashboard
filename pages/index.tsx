@@ -11,7 +11,8 @@ import ErrorComponent from 'next/error'
 import Image from 'next/image'
 
 import { isAdministrator } from '../lib/auth'
-import { auth0, mongo } from '../lib/util'
+import { auth0 } from '../lib/util'
+import { loadPolicy } from '../lib/load-policies'
 
 export default function Dashboard({
   authorized,
@@ -76,11 +77,9 @@ export const getServerSideProps = withPageAuthRequired({
       return { props: { authorized: false, policy: {}, members: [] } }
     }
 
-    const db = await mongo()
     const session = getSession(ctx.req, ctx.res)
     const orgId = session?.user.org_id
-    const policies = db.db('policies').collection('org_policies')
-    const policy = (await policies.findOne({ _id: orgId })) ?? {}
+    const policy = await loadPolicy(orgId)
     const members = await auth0().organizations.getMembers({ id: orgId })
     const withRoles = await Promise.all(
       members.map(async (member) => {
