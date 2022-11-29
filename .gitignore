@@ -2,3 +2,6 @@
 /.next/
 /next-env.d.ts
 /node_modules/
+
+# Local Netlify folder
+.netlify
