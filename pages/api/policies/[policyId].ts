@@ -17,7 +17,6 @@ export default async function PolicyHandler(
   res: NextApiResponse
 ) {
   const { method, body } = req
-  const { policyId } = req.query
 
   const session = getSession(req, res)
   const orgId = session?.user.org_id
