@@ -4,13 +4,13 @@
  *
  */
 
-import type { OrganizationMember, Role } from 'auth0'
 import type { InferGetServerSidePropsType } from 'next'
 
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0'
-import Error from 'next/error'
+import ErrorComponent from 'next/error'
 import Image from 'next/image'
 
+import { isAdministrator } from '../lib/auth'
 import { auth0, mongo } from '../lib/util'
 
 export default function Dashboard({
@@ -61,7 +61,7 @@ export default function Dashboard({
     )
   } else {
     return (
-      <Error
+      <ErrorComponent
         statusCode={403}
         title="You are not authorized to view this page"
       />
@@ -71,50 +71,29 @@ export default function Dashboard({
 
 export const getServerSideProps = withPageAuthRequired({
   getServerSideProps: async (ctx) => {
-    const db = await mongo()
-    const session = getSession(ctx.req, ctx.res)
-
-    // TODO(owen): Make this check robust against admin being a substring of
-    // another scope.
-    if (!session?.accessTokenScope?.includes('admin')) {
+    if (!(await isAdministrator(ctx.req, ctx.res))) {
       ctx.res.statusCode = 403
       return { props: { authorized: false, policy: {}, members: [] } }
     }
 
-    const orgId = session.user.org_id
+    const db = await mongo()
+    const session = getSession(ctx.req, ctx.res)
+    const orgId = session?.user.org_id
     const policies = db.db('policies').collection('org_policies')
     const policy = (await policies.findOne({ _id: orgId })) ?? {}
-    const members = await new Promise<OrganizationMember[]>(
-      (resolve, reject) => {
-        auth0().organizations.getMembers({ id: orgId }, (err, members) => {
-          if (!err) {
-            resolve(members)
-          } else {
-            reject(err)
-          }
-        })
-      }
-    )
+    const members = await auth0().organizations.getMembers({ id: orgId })
     const withRoles = await Promise.all(
       members.map(async (member) => {
-        const roles = await new Promise<Role[]>(async (resolve, reject) => {
-          if (member.user_id) {
-            await auth0().organizations.getMemberRoles(
-              {
-                id: orgId,
-                user_id: member.user_id,
-              },
-              (err, roles) => {
-                if (!err) {
-                  resolve(roles)
-                } else {
-                  reject(err)
-                }
-              }
-            )
-          } else {
-            reject(`Missing property 'user_id' from ${JSON.stringify(member)}`)
-          }
+        if (member.user_id === undefined) {
+          throw new Error(
+            `Missing property 'user_id' from ${JSON.stringify(member)}`,
+            {}
+          )
+        }
+
+        const roles = await auth0().organizations.getMemberRoles({
+          id: orgId,
+          user_id: member.user_id as string,
         })
 
         return { ...member, roles }

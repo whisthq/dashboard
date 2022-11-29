@@ -6,6 +6,7 @@
 
 import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0'
 
+import { isAdministrator } from '../../lib/auth'
 import { mongo } from '../../lib/util'
 
 /**
@@ -43,9 +44,7 @@ export default withApiAuthRequired(async (req, res) => {
     return
   }
 
-  // TODO(owen): Make this check robust against admin being a substring of
-  // another scope.
-  if (!session?.accessTokenScope?.includes('admin')) {
+  if (!(await isAdministrator(req, res))) {
     res.status(403).json({
       errors: [
         {

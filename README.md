@@ -9,12 +9,6 @@ To start working on the Enterprise Dashboard locally, start by creating a file c
 ```
 # .env.local
 
-# The name, as it were, for the collection of logical endpoints that together
-# constitute the Whist API. Set in the Auth0 dashboard under Applications >
-# APIs > Whist API > Settings. In order for an access token to be valid, its
-# aud claim must match this value.
-AUTH0_AUDIENCE=https://api.fractal.co
-
 # This is where the Docker Compose stack will serve the application by default.
 # NOTE: Docker Compose will not read this value; it must be set so the
 # Dashboard's code knows where it can be reached.

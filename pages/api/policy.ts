@@ -4,7 +4,7 @@
  *
  */
 
-import { withJwtAuthRequired } from '../../lib/auth'
+import { getClaims, withJwtAuthRequired } from '../../lib/auth'
 import { mongo } from '../../lib/util'
 
 /**
@@ -25,7 +25,8 @@ export default withJwtAuthRequired(async (req, res) => {
     return
   }
 
-  const orgId = req.token.org_id
+  const claims = getClaims(req)
+  const orgId = claims?.org_id
 
   if (orgId === undefined) {
     res.status(401).json({
@@ -48,7 +49,12 @@ export default withJwtAuthRequired(async (req, res) => {
       data: {
         id: orgId,
         type: 'policy',
-        attributes: policy,
+        // attributes: policy,
+        attributes: {
+          SearchSuggestEnabled: false,
+          BackgroundModeEnabled: false,
+          AllowFileSelectionDialogs: false,
+        },
       },
     })
   } else {
