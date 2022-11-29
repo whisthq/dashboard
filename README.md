@@ -82,3 +82,16 @@ If it's working properly, you won't be able to log in to the development Enterpr
 Visit the Auth0 dashboard to add yourself or ask someone to do it for you.
 
 Before submitting any changes you make, ensure your code is properly formatted and devoid of lint by running `npm run lint [-- [--help]]` and `npm run format [-- [--help]]`.
+
+### Building and Deploying
+
+The dashboard is deployed to Netlify on each push to the `main` branch. All pull requests to this branch will generate a deploy preview to verify and discuss the changes.
+It is recommended to install the [Netlify CLI](https://cli.netlify.com/) to perform deploys, tests and previews, and to verify the status of the dashboard. You can find the
+configuration on the `netlify.toml` file.
+
+You can make a test deployment of your local changes using the command `netlify dev -p 3001 -c "next"`, and this will generate a preview on your machine.
+For starting a deploy using the CLI, run `netlify deploy --build` (this will generate a deploy) and once you have confirmed it works, run `netlify deploy --build --prod`.
+Note that the `--build` flag is necessary, otherwise the site won't run the `next build` command and the deploy will fail.
+
+Netlify uses the Next.js runtime to support most, if not all of Next.js functionalities. Server-side rendering is achieved using Netlify Functions, so when the
+site is deployed, serverless functions will be created automatically. For more information, see the [Netlify docs](https://docs.netlify.com/integrations/frameworks/next-js/overview/)
