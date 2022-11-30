@@ -176,6 +176,6 @@ export function withJwtAuthRequired(apiRoute: NextApiHandler): NextApiHandler {
       throw err
     }
 
-    apiRoute(req, res)
+    await apiRoute(req, res)
   }
 }
