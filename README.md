@@ -1,5 +1,7 @@
 # Whist Enterprise Dashboard
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/ecac4a6d-d41c-4be6-9a1e-01fd11c7a694/deploy-status)](https://app.netlify.com/sites/whist-dashboard/deploys)
+
 The Whist Enterprise Dashboard allows customer account administrators to manage their accounts and set policies for their employees using the Whist browser.
 
 ### Development
@@ -86,12 +88,14 @@ Before submitting any changes you make, ensure your code is properly formatted a
 ### Building and Deploying
 
 The dashboard is deployed to Netlify on each push to the `main` branch. All pull requests to this branch will generate a deploy preview to verify and discuss the changes.
+
 It is recommended to install the [Netlify CLI](https://cli.netlify.com/) to perform deploys, tests and previews, and to verify the status of the dashboard. You can find the
 configuration on the `netlify.toml` file.
 
 You can make a test deployment of your local changes using the command `netlify dev -p 3001 -c "next"`, and this will generate a preview on your machine.
 For starting a deploy using the CLI, run `netlify deploy --build` (this will generate a deploy) and once you have confirmed it works, run `netlify deploy --build --prod`.
+
 Note that the `--build` flag is necessary, otherwise the site won't run the `next build` command and the deploy will fail.
 
 Netlify uses the Next.js runtime to support most, if not all of Next.js functionalities. Server-side rendering is achieved using Netlify Functions, so when the
-site is deployed, serverless functions will be created automatically. For more information, see the [Netlify docs](https://docs.netlify.com/integrations/frameworks/next-js/overview/)
+site is deployed, serverless functions will be created automatically. For more information, see the [Netlify docs](https://docs.netlify.com/integrations/frameworks/next-js/overview/).
