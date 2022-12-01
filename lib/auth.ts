@@ -21,6 +21,7 @@ import { auth0 } from './util'
 
 let _jwks: JwksClient
 
+<<<<<<< HEAD
 /**
  * Thrown when we are unable to extract claims from an access token. There's no
  * need to export this custom error class for now. We just use it in this file
@@ -37,6 +38,9 @@ class TokenError extends Error {
  *
  */
 function jwks(): JwksClient {
+=======
+const jwks = (): JwksClient => {
+>>>>>>> 7e8aefd (Add users)
   if (_jwks === undefined) {
     const jwksEndpoint = new URL(
       '/.well-known/jwks.json',
@@ -48,11 +52,15 @@ function jwks(): JwksClient {
   return _jwks
 }
 
+<<<<<<< HEAD
 /**
  * Extract the raw JWT access token from the Authorization header of a request
  * to an API route that requires JWT authentication.
  */
 function getToken(req: NextApiRequest): string | null {
+=======
+const getToken = (req: NextApiRequest): string | null => {
+>>>>>>> 7e8aefd (Add users)
   const auth = req.headers.authorization
 
   if (auth === undefined) {
@@ -102,10 +110,16 @@ export async function isAdministrator(
   return roles.findIndex((role) => role.name === 'Organization Admin') >= 0
 }
 
+<<<<<<< HEAD
 /**
  *
  */
 export function withJwtAuthRequired(apiRoute: NextApiHandler): NextApiHandler {
+=======
+export const withJwtAuthRequired = (
+  apiRoute: NextApiHandlerWithToken
+): NextApiHandlerWithToken => {
+>>>>>>> 7e8aefd (Add users)
   return async (req, res) => {
     const token = getToken(req)
 

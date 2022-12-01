@@ -10,7 +10,7 @@ import { MongoClient } from 'mongodb'
 let _auth0: ManagementClient
 let _mongo: Promise<MongoClient>
 
-export function auth0() {
+export const auth0 = () => {
   if (_auth0 === undefined) {
     _auth0 = new ManagementClient({
       domain: process.env.AUTH0_MACHINE_DOMAIN as string,
@@ -23,7 +23,7 @@ export function auth0() {
   return _auth0
 }
 
-export function mongo() {
+export const mongo = () => {
   if (_mongo === undefined) {
     const client = new MongoClient(process.env.MONGODB_URL as string)
     _mongo = client.connect()
