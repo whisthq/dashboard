@@ -158,7 +158,8 @@ export function withJwtAuthRequired(apiRoute: NextApiHandler): NextApiHandler {
         )
       })
     } catch (err) {
-      if (err instanceof TokenError) {
+      // Handle the case in which the access token is invalid for any reason.
+      if (err instanceof TokenError || err instanceof jwt.JsonWebTokenError) {
         res.status(401).json({
           errors: [
             {
