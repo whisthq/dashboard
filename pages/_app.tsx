@@ -1,8 +1,4 @@
-// _app.ts
-
-/**
- * Define a custom App.
- */
+import './global.css'
 
 import type { AppProps } from 'next/app'
 
