@@ -1,29 +1,13 @@
 import { Fragment, useState } from 'react'
 import classNames from 'classnames'
 import { Dialog, Transition } from '@headlessui/react'
-import {
-  Bars3Icon,
-  HomeIcon,
-  UsersIcon,
-  XMarkIcon,
-  PuzzlePieceIcon,
-  CogIcon,
-  GlobeAltIcon,
-  ShieldCheckIcon
-} from '@heroicons/react/24/outline'
+import { XMarkIcon, Bars3Icon } from '@heroicons/react/24/outline'
 
-const navigation = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon },
-  { name: 'Users', href: '#', icon: UsersIcon },
-  { name: 'Network Logs', href: '#', icon: GlobeAltIcon },
-  { name: 'Extensions', href: '#', icon: PuzzlePieceIcon },
-  { name: 'Policies', href: '#', icon: Bars3Icon },
-  { name: 'Protection', href: '#', icon: ShieldCheckIcon },
-  { name: 'Settings', href: '#', icon: CogIcon },
-]
+import { navigation } from '../constants/navigation'
 
 export default function Template(props: {
-  current: string
+  onClick: (index: number) => void,
+  current: string,
   body: JSX.Element
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -85,10 +69,10 @@ export default function Template(props: {
                       />
                     </div>
                     <nav className="mt-5 space-y-1 px-2">
-                      {navigation.map((item) => (
-                        <a
+                      {navigation.map((item, index) => (
+                        <button
+                          onClick={() => props.onClick(index)}
                           key={item.name}
-                          href={item.href}
                           className={classNames(
                             item.name === props.current
                               ? 'bg-gray-900 text-white'
@@ -104,7 +88,7 @@ export default function Template(props: {
                             aria-hidden="true"
                           />
                           {item.name}
-                        </a>
+                        </button>
                       ))}
                     </nav>
                   </div>
@@ -145,13 +129,13 @@ export default function Template(props: {
                 />
               </div>
               <nav className="mt-5 flex-1 space-y-1 px-2">
-                {navigation.map((item) => (
-                  <a
+                {navigation.map((item, index) => (
+                  <button
                     key={item.name}
-                    href={item.href}
+                    onClick={() => props.onClick(index)}
                     className={classNames(
                       item.name === props.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                      'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
+                      'group flex items-center px-2 py-2 text-sm font-medium rounded-md w-full'
                     )}
                   >
                     <item.icon
@@ -162,7 +146,7 @@ export default function Template(props: {
                       aria-hidden="true"
                     />
                     {item.name}
-                  </a>
+                  </button>
                 ))}
               </nav>
             </div>
