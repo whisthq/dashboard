@@ -29,7 +29,10 @@ export default withApiAuthRequired(async (req, res) => {
   }
 
   const session = getSession(req, res)
-  const orgId = session.user?.org_id
+  let orgId = ''
+  if (session != null) {
+    orgId = session.user?.org_id
+  }
 
   // Callers must belong to an organization.
   if (orgId === undefined) {
