@@ -8,7 +8,6 @@ import type { InferGetServerSidePropsType } from 'next'
 
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import ErrorComponent from 'next/error'
-import Image from 'next/image'
 
 import { isAdministrator } from '../lib/auth'
 import { auth0 } from '../lib/util'
@@ -18,18 +17,29 @@ import Dashboard from './dashboard'
 
 export default function Root({
   authorized,
+  token,
+  orgId,
+  policyId,
   policy,
   members,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   if (authorized) {
     return (
-      <><Dashboard/></>
+      <>
+        <Dashboard
+          token={token}
+          orgId={orgId}
+          policyId={policyId}
+          policy={policy}
+          members={members}
+        />
+      </>
     )
   } else {
     return (
       <ErrorComponent
         statusCode={403}
-        title="You are not authorized to view this page"
+        title="You are 'not authorized to view this page"
       />
     )
   }
@@ -44,7 +54,6 @@ export const getServerSideProps = withPageAuthRequired({
 
     const session = getSession(ctx.req, ctx.res)
     const orgId = session?.user.org_id
-    console.log("orgid " + orgId)
     const policy = await loadPolicy(orgId)
     const members = await auth0().organizations.getMembers({ id: orgId })
     const withRoles = await Promise.all(
@@ -68,7 +77,11 @@ export const getServerSideProps = withPageAuthRequired({
     return {
       props: {
         authorized: true,
-        policy: policy != null ? JSON.parse(JSON.stringify(policy?.policy)) : {},
+        token: session?.accessToken,
+        orgId: orgId,
+        policyId: policy != null ? JSON.parse(JSON.stringify(policy?._id)) : '',
+        policy:
+          policy != null ? JSON.parse(JSON.stringify(policy?.policy)) : {},
         members: withRoles,
       },
     }

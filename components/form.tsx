@@ -1,143 +1,112 @@
-// index.ts
+import { Fragment } from 'react'
+import { Formik, Form, Field } from 'formik'
+import { globalPolicy } from '../constants/policy'
 
-/**
- *
- */
-import type { InferGetServerSidePropsType } from 'next'
-import ErrorComponent from 'next/error'
-
-export default function Form({
-  authorized,
+export default function PolicyForm({
   orgId,
+  policyId,
   policy,
   token,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  // Handles the submit event on form submit.
-  const handleSubmit = async (event) => {
-    // Stop the form from submitting and refreshing the page.
-    event.preventDefault()
+  isUpdate,
+}) {
+  return (
+    <>
+      <Formik
+        initialValues={globalPolicy}
+        validate={(values) => console.log(values)}
+        onSubmit={async (values, { setSubmitting }) => {
+          const data = {
+            // Add the organization id before sending to API
+            org_id: orgId,
+            policy: values,
+          }
 
-    const formData = {}
+          const endpoint = '/api/policies'
 
-    // Add the org id extracted from the session
-    formData['org_id'] = orgId
+          let options = {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(data),
+          }
 
-    Object.keys(policy).forEach((key) => {
-      const current = event.target[key]
+          if (isUpdate) {
+            options = {
+              endpoint: endpoint + `/${policyId}`,
+              method: 'PUT',
+              ...options,
+            }
+          } else {
+            options = {
+              endpoint: endpoint,
+              method: 'POST',
+              ...options,
+            }
+          }
 
-      // If event comes from a checkbox, use the checked
-      // property instead of value
-      if (current.type == 'checkbox') {
-        formData[key] = current.checked
-        return
-      }
-
-      // Try to parse the string as an number.
-      if (current.type == 'number') {
-        formData[key] = parseInt(current.value)
-        return
-      }
-
-      // If the string is comma-separated, parse to an array.
-      const commaSeparated = current.value.split(',')
-      if (commaSeparated.length > 1) {
-        formData[key] = commaSeparated
-        return
-      }
-
-      formData[key] = current.value
-    })
-    console.log(formData)
-
-    // Get data from the form.
-    const data = {
-      policy: formData,
-    }
-
-    // Send the data to the server in JSON format.
-    const JSONdata = JSON.stringify(data)
-
-    // API endpoint where we send form data.
-    const endpoint = '/api/policies'
-
-    // Form the request for sending data to the server.
-    const options = {
-      // The method is POST because we are sending data.
-      method: 'POST',
-      // Tell the server we're sending JSON.
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token,
-      },
-      // Body of the request is the JSON data we created above.
-      body: JSONdata,
-    }
-
-    // Send the form data to our forms API on Vercel and get a response.
-    const response = await fetch(endpoint, options)
-
-    // Get the response data from server as JSON.
-    // If server returns the name submitted, that means the form works.
-    const result = await response.json()
-    console.log(result)
-  }
-  if (authorized) {
-    return (
-      <div>
-        <p>Policy</p>
-
-        <div style={{ padding: '2em' }}>
-          <form onSubmit={handleSubmit}>
+          setSubmitting(true)
+          const response = await fetch(endpoint, options)
+          const result = await response.json()
+          setSubmitting(false)
+          console.log(result)
+        }}
+      >
+        {({ isSubmitting }) => (
+          <Form>
             {Object.entries(policy).map(([k, v]) => {
               return typeof v == 'boolean' ? (
                 <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'flex-start',
-                    gap: '1rem',
-                  }}
                   key={k}
+                  className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
                 >
-                  <p>{k}</p>
-                  <input id={k} name={k} type="checkbox" />
+                  <div className="text-sm font-medium text-gray-900">{k}</div>
+                  <div>
+                    <Field type="checkbox" id={k} name={k}></Field>
+                  </div>
                 </div>
-              ) : typeof v == 'number' ? (
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'flex-start',
-                    gap: '1rem',
-                  }}
-                  key={k}
-                >
-                  <p>{k}</p>
-                  <input id={k} name={k} type="number" />
+              ) : Array.isArray(v) ? (
+                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <div className="text-sm font-medium text-gray-900">{k}</div>
+                  <div className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    <ul
+                      role="list"
+                      className="divide-y divide-gray-200 rounded-md border border-gray-200"
+                    >
+                      {v.map((elem, i) => (
+                        <Field
+                          name={`${k}.${i}`}
+                          key={i}
+                          className="flex items-center justify-between py-3 pl-3 pr-4 text-sm"
+                        ></Field>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               ) : (
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'flex-start',
-                    gap: '1rem',
-                  }}
-                  key={k}
-                >
-                  <label>{k}</label>
-                  <input id={k} name={k} defaultValue={v} />
+                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <div className="text-sm font-medium text-gray-900">{k}</div>
+                  <Field
+                    id={k}
+                    name={k}
+                    className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"
+                  />
                 </div>
               )
             })}
-            <input type="submit" value="Submit" />
-          </form>
-        </div>
-      </div>
-    )
-  } else {
-    return (
-      <ErrorComponent
-        statusCode={403}
-        title="You are not authorized to view this page"
-      />
-    )
-  }
+
+            <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              >
+                Save
+              </button>
+            </div>
+          </Form>
+        )}
+      </Formik>
+    </>
+  )
 }
