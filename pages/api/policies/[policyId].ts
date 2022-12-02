@@ -57,10 +57,11 @@ export default withApiAuthRequired(
         try {
           const updateResult = await policies.updateOne(
             { _id: new ObjectId(body.id) },
-            { $set: body.content }
+            { $set: body.policy }
           )
           res.status(200).json({ updated: updateResult })
         } catch (err) {
+          console.error(err)
           res.status(503).json({ updated: 0, error: err })
         }
         break
@@ -72,6 +73,7 @@ export default withApiAuthRequired(
           })
           res.status(200).json({ deleted: deleteResult })
         } catch (err) {
+          console.error(err)
           res.status(503).json({ deleted: 0, error: err })
         }
         break
