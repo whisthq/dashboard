@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Extensions from '../components/extensions'
 import Network from '../components/network'
 import Template from '../components/template'
 import Users from '../components/users'
@@ -9,7 +10,8 @@ export default () => {
 
   const nameToBody = {
     Users: <Users />,
-    "Network Logs": <Network />
+    "Network Logs": <Network />,
+    Extensions: <Extensions />
   } as any
 
   const onClick = (index: number) => {
