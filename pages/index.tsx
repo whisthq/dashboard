@@ -3,17 +3,15 @@
 /**
  *
  */
-
-import type { InferGetServerSidePropsType } from 'next'
-
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import ErrorComponent from 'next/error'
 
 import { isAdministrator } from '../lib/auth'
 import { auth0 } from '../lib/util'
-import { loadPolicy } from '../lib/load-policies'
+import { loadPolicy, Policy } from '../lib/load-policies'
 
 import Dashboard from './dashboard'
+import { OrganizationMember } from 'auth0'
 
 export default function Root({
   authorized,
@@ -22,7 +20,14 @@ export default function Root({
   policyId,
   policy,
   members,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+}: {
+  authorized: boolean
+  token: string
+  orgId: string
+  policyId: string
+  policy: Policy
+  members: OrganizationMember[]
+}) {
   if (authorized) {
     return (
       <>
@@ -46,10 +51,30 @@ export default function Root({
 }
 
 export const getServerSideProps = withPageAuthRequired({
-  getServerSideProps: async (ctx) => {
+  getServerSideProps: async (
+    ctx
+  ): Promise<{
+    props: {
+      authorized: boolean
+      token: string
+      orgId: string
+      policyId: string
+      policy: Policy
+      members: OrganizationMember[]
+    }
+  }> => {
     if (!(await isAdministrator(ctx.req, ctx.res))) {
       ctx.res.statusCode = 403
-      return { props: { authorized: false, policy: {}, members: [] } }
+      return {
+        props: {
+          authorized: false,
+          token: '',
+          orgId: '',
+          policyId: '',
+          policy: {},
+          members: [],
+        },
+      }
     }
 
     const session = getSession(ctx.req, ctx.res)
@@ -77,7 +102,7 @@ export const getServerSideProps = withPageAuthRequired({
     return {
       props: {
         authorized: true,
-        token: session?.accessToken,
+        token: session?.accessToken ? session.accessToken : '',
         orgId: orgId,
         policyId: policy != null ? JSON.parse(JSON.stringify(policy?._id)) : '',
         policy:

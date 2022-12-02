@@ -1,4 +1,6 @@
-const globalPolicy = {
+import { Policy } from '../lib/load-policies'
+
+const globalPolicy: Policy = {
   AllowCrossOriginAuthPrompt: false,
   AllowFileSelectionDialogs: true,
   AllowOutdatedPlugins: true,

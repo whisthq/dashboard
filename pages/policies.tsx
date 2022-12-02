@@ -68,7 +68,7 @@ export default function Dashboard({
                 key={k}
               >
                 <p>{k}</p>
-                <p>{v}</p>
+                <p>{v?.toString()}</p>
               </div>
             )
           })}

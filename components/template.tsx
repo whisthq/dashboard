@@ -6,8 +6,8 @@ import { XMarkIcon, Bars3Icon } from '@heroicons/react/24/outline'
 import { navigation } from '../constants/navigation'
 
 export default function Template(props: {
-  onClick: (index: number) => void,
-  current: string,
+  onClick: (index: number) => void
+  current: string
   body: JSX.Element
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -16,7 +16,11 @@ export default function Template(props: {
     <>
       <div>
         <Transition.Root show={sidebarOpen} as={Fragment}>
-          <Dialog as="div" className="relative z-40 md:hidden" onClose={setSidebarOpen}>
+          <Dialog
+            as="div"
+            className="relative z-40 md:hidden"
+            onClose={setSidebarOpen}
+          >
             <Transition.Child
               as={Fragment}
               enter="transition-opacity ease-linear duration-300"
@@ -56,7 +60,10 @@ export default function Template(props: {
                         onClick={() => setSidebarOpen(false)}
                       >
                         <span className="sr-only">Close sidebar</span>
-                        <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                        <XMarkIcon
+                          className="h-6 w-6 text-white"
+                          aria-hidden="true"
+                        />
                       </button>
                     </div>
                   </Transition.Child>
@@ -82,7 +89,9 @@ export default function Template(props: {
                         >
                           <item.icon
                             className={classNames(
-                              item.name === props.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
+                              item.name === props.current
+                                ? 'text-gray-300'
+                                : 'text-gray-400 group-hover:text-gray-300',
                               'mr-4 flex-shrink-0 h-6 w-6'
                             )}
                             aria-hidden="true"
@@ -103,15 +112,21 @@ export default function Template(props: {
                           />
                         </div>
                         <div className="ml-3">
-                          <p className="text-base font-medium text-white">Tom Cook</p>
-                          <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300">View profile</p>
+                          <p className="text-base font-medium text-white">
+                            Tom Cook
+                          </p>
+                          <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300">
+                            View profile
+                          </p>
                         </div>
                       </div>
                     </a>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
-              <div className="w-14 flex-shrink-0">{/* Force sidebar to shrink to fit close icon */}</div>
+              <div className="w-14 flex-shrink-0">
+                {/* Force sidebar to shrink to fit close icon */}
+              </div>
             </div>
           </Dialog>
         </Transition.Root>
@@ -134,13 +149,17 @@ export default function Template(props: {
                     key={item.name}
                     onClick={() => props.onClick(index)}
                     className={classNames(
-                      item.name === props.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                      item.name === props.current
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                       'group flex items-center px-2 py-2 text-sm font-medium rounded-md w-full'
                     )}
                   >
                     <item.icon
                       className={classNames(
-                        item.name === props.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
+                        item.name === props.current
+                          ? 'text-gray-300'
+                          : 'text-gray-400 group-hover:text-gray-300',
                         'mr-3 flex-shrink-0 h-6 w-6'
                       )}
                       aria-hidden="true"
@@ -162,7 +181,9 @@ export default function Template(props: {
                   </div>
                   <div className="ml-3">
                     <p className="text-sm font-medium text-white">Tom Cook</p>
-                    <p className="text-xs font-medium text-gray-300 group-hover:text-gray-200">View profile</p>
+                    <p className="text-xs font-medium text-gray-300 group-hover:text-gray-200">
+                      View profile
+                    </p>
                   </div>
                 </div>
               </a>
@@ -183,13 +204,13 @@ export default function Template(props: {
           <main className="flex-1">
             <div className="py-6">
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <h1 className="text-2xl font-semibold text-gray-900">{props.current}</h1>
+                <h1 className="text-2xl font-semibold text-gray-900">
+                  {props.current}
+                </h1>
               </div>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
                 {/* Replace with your content */}
-                <div className="py-4">
-                  {props.body}
-                </div>
+                <div className="py-4">{props.body}</div>
                 {/* /End replace */}
               </div>
             </div>

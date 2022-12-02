@@ -5,7 +5,12 @@ import PolicyForm from '../components/form'
 
 import { DocumentPlusIcon, PencilIcon } from '@heroicons/react/20/solid'
 
-export default function Policy({ token, orgId, policyId, policy }) {
+export default function PolicyDisplay({ token, orgId, policyId, policy }: {
+  token: string
+  orgId: string
+  policyId: string
+  policy: Policy
+}) {
   const [showAddForm, setShowAddForm] = useState(false)
   const [showUpdateForm, setShowUpdateForm] = useState(false)
   return (
@@ -129,7 +134,7 @@ export default function Policy({ token, orgId, policyId, policy }) {
                   <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <div className="text-sm font-medium text-gray-900">{k}</div>
                     <div className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      {v}
+                      {v?.toString()}
                     </div>
                   </div>
                 )
