@@ -16,6 +16,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 export default withApiAuthRequired(
   async (req: NextApiRequest, res: NextApiResponse) => {
     const { method, body } = req
+    const { policyId } = req.query
 
     const session = getSession(req, res)
     const orgId = session?.user.org_id
@@ -56,7 +57,7 @@ export default withApiAuthRequired(
       case 'PUT':
         try {
           const updateResult = await policies.updateOne(
-            { _id: new ObjectId(body.id) },
+            { _id: new ObjectId(policyId) },
             { $set: body.policy }
           )
           res.status(200).json({ updated: updateResult })
