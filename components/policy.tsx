@@ -5,7 +5,12 @@ import PolicyForm from '../components/form'
 
 import { DocumentPlusIcon, PencilIcon } from '@heroicons/react/20/solid'
 
-export default function PolicyDisplay({ token, orgId, policyId, policy }: {
+export default function PolicyDisplay({
+  token,
+  orgId,
+  policyId,
+  policy,
+}: {
   token: string
   orgId: string
   policyId: string
