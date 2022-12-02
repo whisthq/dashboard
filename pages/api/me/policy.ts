@@ -42,7 +42,8 @@ export default withJwtAuthRequired(async (req, res) => {
 
   const db = await mongo()
   const policies = db.db('policies').collection('org_policies')
-  const policy = (await policies.findOne({ _id: orgId })) ?? {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { _id, ...policy } = (await policies.findOne({ _id: orgId })) ?? {}
 
   res.status(200).json({
     data: {
