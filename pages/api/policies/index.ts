@@ -71,7 +71,7 @@ export default withApiAuthRequired(
         try {
           // TODO: because we only allow global policies for now, this inserts a single document.
           // In the future this request should insert multiple policies.
-          const insertResult = await policies.insertOne(body.policy)
+          const insertResult = await policies.insertOne(body)
           res.status(200).json({ inserted: insertResult })
         } catch (err) {
           console.error(err)

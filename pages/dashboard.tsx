@@ -18,6 +18,7 @@ export default ({ token, orgId, policyId, policy, members }) => {
         orgId={orgId}
         policyId={policyId}
         policy={policy}
+        isUpdate={false}
       />
     ),
   } as any

@@ -12,11 +12,18 @@ export default function PolicyForm({
   return (
     <>
       <Formik
-        initialValues={globalPolicy}
-        validate={(values) => console.log(values)}
+        initialValues={isUpdate ? policy : {}}
+        validate={(values) => {
+          const errors = {}
+
+          if (Object.entries(values).length == 0) {
+            return (errors.error = 'empty object')
+          }
+        }}
         onSubmit={async (values, { setSubmitting }) => {
+          // Add the organization id before sending to db
+          // and set to the right format.
           const data = {
-            // Add the organization id before sending to API
             org_id: orgId,
             policy: values,
           }
@@ -45,16 +52,18 @@ export default function PolicyForm({
             }
           }
 
+          console.log('sending options ')
+          console.log(options)
           setSubmitting(true)
           const response = await fetch(endpoint, options)
           const result = await response.json()
-          setSubmitting(false)
           console.log(result)
+          setSubmitting(false)
         }}
       >
         {({ isSubmitting }) => (
           <Form>
-            {Object.entries(policy).map(([k, v]) => {
+            {Object.entries(globalPolicy).map(([k, v]) => {
               return typeof v == 'boolean' ? (
                 <div
                   key={k}
@@ -77,6 +86,7 @@ export default function PolicyForm({
                         <Field
                           name={`${k}.${i}`}
                           key={i}
+                          placeholder={isUpdate ? '' : elem}
                           className="flex items-center justify-between py-3 pl-3 pr-4 text-sm"
                         ></Field>
                       ))}
@@ -89,6 +99,7 @@ export default function PolicyForm({
                   <Field
                     id={k}
                     name={k}
+                    placeholder={isUpdate ? '' : globalPolicy[k]?.toString()}
                     className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"
                   />
                 </div>
