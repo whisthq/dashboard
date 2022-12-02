@@ -57,7 +57,11 @@ export default withApiAuthRequired(
       case 'PUT':
         try {
           const updateResult = await policies.updateOne(
-            { _id: new ObjectId(policyId) },
+            {
+              _id: new ObjectId(
+                policyId != undefined ? policyId.toString() : ''
+              ),
+            },
             { $set: body.policy }
           )
           res.status(200).json({ updated: updateResult })
