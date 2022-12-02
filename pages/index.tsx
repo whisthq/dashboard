@@ -27,52 +27,7 @@ export default function Dashboard({
         <br />
         <br />
         <p>Policy</p>
-
-        <div style={{ padding: '2em' }}>
-          {Object.entries(policy).map(([k, v]) => {
-            return typeof v == 'boolean' ? (
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'flex-start',
-                  gap: '1rem',
-                }}
-                key={k}
-              >
-                <p>{k}</p>
-                <input type="checkbox" checked={v} disabled />
-              </div>
-            ) : Array.isArray(v) ? (
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'flex-start',
-                  gap: '1rem',
-                }}
-                key={k}
-              >
-                <p>{k}</p>
-                <ul>
-                  {v.map((elem, i) => (
-                    <li key={i}>{elem}</li>
-                  ))}
-                </ul>
-              </div>
-            ) : (
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'flex-start',
-                  gap: '1rem',
-                }}
-                key={k}
-              >
-                <p>{k}</p>
-                <p>{v}</p>
-              </div>
-            )
-          })}
-        </div>
+        <textarea readOnly value={policy} />
 
         <br />
         <br />
