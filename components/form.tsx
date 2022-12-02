@@ -1,19 +1,13 @@
 import { Fragment } from 'react'
 import { Formik, Form, Field } from 'formik'
 
-import { Policy } from '../lib/load-policies'
+import { Policy } from '../lib/types'
 import { globalPolicy } from '../constants/policy'
 
 export default function PolicyForm({
-  token,
-  orgId,
-  policyId,
   policy,
   isUpdate,
 }: {
-  token: string
-  orgId: string
-  policyId: string
   policy: Policy
   isUpdate: boolean
 }) {
@@ -21,33 +15,19 @@ export default function PolicyForm({
     <>
       <Formik
         initialValues={isUpdate ? policy : {}}
-        onSubmit={async (values, { setSubmitting }) => {
-          // Add the organization id before sending to db
-          // and set to the right format.
+        onSubmit={async (attributes, { setSubmitting }) => {
           const data = {
-            org_id: orgId,
-            policy: values,
+            type: 'policy',
+            attributes,
           }
-
-          let endpoint = '/api/policies'
-          let method = 'POST'
-
-          if (isUpdate) {
-            endpoint = `${endpoint}/${policyId}`
-            method = 'PUT'
-          }
-
           const options = {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-            method: method,
-            body: JSON.stringify(data),
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data }),
           }
 
           setSubmitting(true)
-          const response = await fetch(endpoint, options)
+          const response = await fetch('/api/policy', options)
           const result = await response.json()
           console.log(result)
           setSubmitting(false)

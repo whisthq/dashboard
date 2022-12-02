@@ -4,37 +4,22 @@ import Template from '../components/template'
 import Users from '../components/users'
 import PolicyDisplay from '../components/policy'
 import { navigation } from '../constants/navigation'
-import { Policy } from '../lib/load-policies'
+import { Policy } from '../lib/types'
 import { OrganizationMember } from 'auth0'
 
 const Dashboard = ({
-  token,
-  orgId,
-  policyId,
   policy,
   members,
 }: {
-  token: string
-  orgId: string
-  policyId: string
   policy: Policy
   members: OrganizationMember[]
 }) => {
   const [current, setCurrent] = useState(1)
 
-  // TODO: Fix types
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const nameToBody: any = {
+  const nameToBody: { [page: string]: JSX.Element } = {
     Users: <Users members={members} />,
     'Network Logs': <Network />,
-    Policies: (
-      <PolicyDisplay
-        token={token}
-        orgId={orgId}
-        policyId={policyId}
-        policy={policy}
-      />
-    ),
+    Policies: <PolicyDisplay policy={policy} />,
   }
 
   const onClick = (index: number) => {

@@ -1,4 +1,4 @@
-import { Policy } from '../lib/load-policies'
+import { Policy } from '../lib/types'
 
 const globalPolicy: Policy = {
   AllowCrossOriginAuthPrompt: false,

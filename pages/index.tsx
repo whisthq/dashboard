@@ -7,37 +7,25 @@ import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import ErrorComponent from 'next/error'
 
 import { isAdministrator } from '../lib/auth'
-import { auth0 } from '../lib/util'
-import { loadPolicy, Policy } from '../lib/load-policies'
+import { auth0, mongo } from '../lib/util'
+import { Policy } from '../lib/types'
 
 import Dashboard from './dashboard'
 import { OrganizationMember } from 'auth0'
 
 export default function Root({
   authorized,
-  token,
-  orgId,
-  policyId,
   policy,
   members,
 }: {
   authorized: boolean
-  token: string
-  orgId: string
-  policyId: string
   policy: Policy
   members: OrganizationMember[]
 }) {
   if (authorized) {
     return (
       <>
-        <Dashboard
-          token={token}
-          orgId={orgId}
-          policyId={policyId}
-          policy={policy}
-          members={members}
-        />
+        <Dashboard policy={policy} members={members} />
       </>
     )
   } else {
@@ -56,9 +44,6 @@ export const getServerSideProps = withPageAuthRequired({
   ): Promise<{
     props: {
       authorized: boolean
-      token: string
-      orgId: string
-      policyId: string
       policy: Policy
       members: OrganizationMember[]
     }
@@ -68,9 +53,6 @@ export const getServerSideProps = withPageAuthRequired({
       return {
         props: {
           authorized: false,
-          token: '',
-          orgId: '',
-          policyId: '',
           policy: {},
           members: [],
         },
@@ -79,7 +61,13 @@ export const getServerSideProps = withPageAuthRequired({
 
     const session = getSession(ctx.req, ctx.res)
     const orgId = session?.user.org_id
-    const policy = await loadPolicy(orgId)
+
+    // TODO: Handle missing organization ID.
+
+    const db = await mongo()
+    const policies = db.db('policies').collection('org_policies')
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { _id, ...policy } = (await policies.findOne({ _id: orgId })) ?? {}
     const members = await auth0().organizations.getMembers({ id: orgId })
     const withRoles = await Promise.all(
       members.map(async (member) => {
@@ -102,11 +90,7 @@ export const getServerSideProps = withPageAuthRequired({
     return {
       props: {
         authorized: true,
-        token: session?.accessToken ? session.accessToken : '',
-        orgId: orgId,
-        policyId: policy != null ? JSON.parse(JSON.stringify(policy?._id)) : '',
-        policy:
-          policy != null ? JSON.parse(JSON.stringify(policy?.policy)) : {},
+        policy,
         members: withRoles,
       },
     }

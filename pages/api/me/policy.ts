@@ -45,11 +45,17 @@ export default withJwtAuthRequired(async (req, res) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { _id, ...policy } = (await policies.findOne({ _id: orgId })) ?? {}
 
-  res.status(200).json({
-    data: {
-      id: '',
-      type: 'policy',
-      attributes: policy,
-    },
-  })
+  if (true) {
+    // Forward-incompatible response format
+    res.status(200).json({ policy })
+  } else {
+    // Approximate JSON:API response format
+    res.status(200).json({
+      data: {
+	id: '',
+	type: 'policy',
+	attributes: policy,
+      },
+    })
+  }
 })

@@ -4,9 +4,9 @@
  *
  */
 
-import { withApiAuthRequired } from '@auth0/nextjs-auth0'
+import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0'
 
-import { getClaims, isAdministrator } from '../../lib/auth'
+import { isAdministrator } from '../../lib/auth'
 import { mongo } from '../../lib/util'
 
 /**
@@ -28,8 +28,8 @@ export default withApiAuthRequired(async (req, res) => {
     return
   }
 
-  const claims = getClaims(req)
-  const orgId = claims?.org_id
+  const session = getSession(req, res)
+  const orgId = session.user?.org_id
 
   // Callers must belong to an organization.
   if (orgId === undefined) {
@@ -65,7 +65,7 @@ export default withApiAuthRequired(async (req, res) => {
 
   // We expect the request to be a JSON object containing a
   // data.policy key.
-  const policy = req.body.data?.policy
+  const policy = req.body.data?.attributes
 
   if (!(policy instanceof Object)) {
     res.status(400).json({

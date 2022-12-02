@@ -1,21 +1,11 @@
-import type { Policy } from '../lib/load-policies'
+import type { Policy } from '../lib/types'
 import { Transition } from '@headlessui/react'
 import { useState, Fragment } from 'react'
 import PolicyForm from '../components/form'
 
 import { DocumentPlusIcon, PencilIcon } from '@heroicons/react/20/solid'
 
-export default function PolicyDisplay({
-  token,
-  orgId,
-  policyId,
-  policy,
-}: {
-  token: string
-  orgId: string
-  policyId: string
-  policy: Policy
-}) {
+export default function PolicyDisplay({ policy }: { policy: Policy }) {
   const [showAddForm, setShowAddForm] = useState(false)
   const [showUpdateForm, setShowUpdateForm] = useState(false)
   return (
@@ -73,13 +63,7 @@ export default function PolicyDisplay({
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <PolicyForm
-          token={token}
-          orgId={orgId}
-          policyId={policyId}
-          policy={policy}
-          isUpdate={false}
-        />
+        <PolicyForm policy={policy} isUpdate={false} />
       </Transition>
 
       <Transition
@@ -91,13 +75,7 @@ export default function PolicyDisplay({
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <PolicyForm
-          token={token}
-          orgId={orgId}
-          policyId={policyId}
-          policy={policy}
-          isUpdate={true}
-        />
+        <PolicyForm policy={policy} isUpdate={true} />
       </Transition>
 
       {!showAddForm && !showUpdateForm ? (
