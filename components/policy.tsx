@@ -1,8 +1,13 @@
 import type { Policy } from '../lib/load-policies'
-import { Fragment } from 'react'
+import { Transition } from '@headlessui/react'
+import { useState, Fragment } from 'react'
+import PolicyForm from '../components/form'
+
 import { DocumentPlusIcon, PencilIcon } from '@heroicons/react/20/solid'
 
-export default function Policy({ policy }) {
+export default function Policy({ token, orgId, policyId, policy }) {
+  const [showAddForm, setShowAddForm] = useState(false)
+  const [showUpdateForm, setShowUpdateForm] = useState(false)
   return (
     <>
       <div className="lg:flex lg:items-center lg:justify-between pb-5">
@@ -15,6 +20,10 @@ export default function Policy({ policy }) {
         <div className="mt-5 flex lg:mt-0 lg:ml-4">
           <span className="hidden sm:block">
             <button
+              onClick={() => {
+                setShowAddForm((showAddForm) => !showAddForm)
+                setShowUpdateForm(false)
+              }}
               type="button"
               className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
@@ -28,6 +37,10 @@ export default function Policy({ policy }) {
 
           <span className="ml-3 hidden sm:block">
             <button
+              onClick={() => {
+                setShowAddForm(false)
+                setShowUpdateForm((showUpdateForm) => !showUpdateForm)
+              }}
               type="button"
               className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
@@ -41,52 +54,92 @@ export default function Policy({ policy }) {
         </div>
       </div>
 
-      <div className="overflow-hidden bg-white shadow sm:rounded-lg">
-        <div className="border-t border-gray-200">
-          <div>
-            {Object.entries(policy).map(([k, v]) => {
-              return typeof v == 'boolean' ? (
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <div className="text-sm font-medium text-gray-900">{k}</div>
-                  <div className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    {v ? 'Enabled' : 'Disabled'}
+      <Transition
+        show={showAddForm}
+        enter="transition-opacity duration-75"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-150"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <PolicyForm
+          token={token}
+          orgId={orgId}
+          policyId={policyId}
+          policy={policy}
+          isUpdate={false}
+        />
+      </Transition>
+
+      <Transition
+        show={showUpdateForm}
+        enter="transition-opacity duration-75"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-150"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <PolicyForm
+          token={token}
+          orgId={orgId}
+          policyId={policyId}
+          policy={policy}
+          isUpdate={true}
+        />
+      </Transition>
+
+      {!showAddForm && !showUpdateForm ? (
+        <div className="overflow-hidden bg-white shadow sm:rounded-lg">
+          <div className="border-t border-gray-200">
+            <div>
+              {Object.entries(policy).map(([k, v]) => {
+                return typeof v == 'boolean' ? (
+                  <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div className="text-sm font-medium text-gray-900">{k}</div>
+                    <div className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                      {v ? 'Enabled' : 'Disabled'}
+                    </div>
                   </div>
-                </div>
-              ) : Array.isArray(v) ? (
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <div className="text-sm font-medium text-gray-900">{k}</div>
-                  <div className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    <ul
-                      role="list"
-                      className="divide-y divide-gray-200 rounded-md border border-gray-200"
-                    >
-                      {v.map((elem, i) => (
-                        <li
-                          key={i}
-                          className="flex items-center justify-between py-3 pl-3 pr-4 text-sm"
-                        >
-                          <div className="flex w-0 flex-1 items-center">
-                            <span className="ml-2 w-0 flex-1 truncate">
-                              {elem}
-                            </span>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
+                ) : Array.isArray(v) ? (
+                  <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div className="text-sm font-medium text-gray-900">{k}</div>
+                    <div className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                      <ul
+                        role="list"
+                        className="divide-y divide-gray-200 rounded-md border border-gray-200"
+                      >
+                        {v.map((elem, i) => (
+                          <li
+                            key={i}
+                            className="flex items-center justify-between py-3 pl-3 pr-4 text-sm"
+                          >
+                            <div className="flex w-0 flex-1 items-center">
+                              <span className="ml-2 w-0 flex-1 truncate">
+                                {elem}
+                              </span>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <div className="text-sm font-medium text-gray-900">{k}</div>
-                  <div className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    {v}
+                ) : (
+                  <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div className="text-sm font-medium text-gray-900">{k}</div>
+                    <div className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                      {v}
+                    </div>
                   </div>
-                </div>
-              )
-            })}
+                )
+              })}
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div></div>
+      )}
     </>
   )
 }

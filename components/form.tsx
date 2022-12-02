@@ -3,10 +3,10 @@ import { Formik, Form, Field } from 'formik'
 import { globalPolicy } from '../constants/policy'
 
 export default function PolicyForm({
+  token,
   orgId,
   policyId,
   policy,
-  token,
   isUpdate,
 }) {
   return (
@@ -28,7 +28,7 @@ export default function PolicyForm({
             policy: values,
           }
 
-          const endpoint = '/api/policies'
+          let endpoint = '/api/policies'
 
           let options = {
             headers: {
@@ -39,20 +39,18 @@ export default function PolicyForm({
           }
 
           if (isUpdate) {
+            endpoint = `${endpoint}/${policyId}`
             options = {
-              endpoint: endpoint + `/${policyId}`,
               method: 'PUT',
               ...options,
             }
           } else {
             options = {
-              endpoint: endpoint,
               method: 'POST',
               ...options,
             }
           }
 
-          console.log('sending options ')
           console.log(options)
           setSubmitting(true)
           const response = await fetch(endpoint, options)

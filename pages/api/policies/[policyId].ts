@@ -62,7 +62,7 @@ export default withApiAuthRequired(
                 policyId != undefined ? policyId.toString() : ''
               ),
             },
-            { $set: body.policy }
+            { $set: body }
           )
           res.status(200).json({ updated: updateResult })
         } catch (err) {
