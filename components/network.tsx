@@ -1,3 +1,5 @@
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+
 import { logs } from '../constants/network'
 
 export default () => {
@@ -18,12 +20,37 @@ export default () => {
           </button>
         </div>
       </div>
-      <div className="mt-4">
-        <input
-          type="text"
-          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-4 bg-gray-50 shadow ring-1 ring-black ring-opacity-5"
-          placeholder="Search logs"
-        />
+      <div className="flex flex-1 mt-4 border-bottom">
+        <form className="flex w-full md:ml-0" action="#" method="GET">
+          <label htmlFor="mobile-search-field" className="sr-only">
+            Search
+          </label>
+          <label htmlFor="desktop-search-field" className="sr-only">
+            Search
+          </label>
+          <div className="relative w-full text-gray-400 focus-within:text-gray-600">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center">
+              <MagnifyingGlassIcon
+                className="h-5 w-5 flex-shrink-0"
+                aria-hidden="true"
+              />
+            </div>
+            <input
+              name="mobile-search-field"
+              id="mobile-search-field"
+              className="h-full w-full border-transparent py-2 pl-8 pr-3 text-base text-gray-900 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0 sm:hidden"
+              placeholder="Search logs"
+              type="search"
+            />
+            <input
+              name="desktop-search-field"
+              id="desktop-search-field"
+              className="hidden h-full w-full border-transparent py-2 pl-8 pr-3 text-sm text-gray-900 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0 sm:block"
+              placeholder="Search logs"
+              type="search"
+            />
+          </div>
+        </form>
       </div>
       <div className="mt-4 flex flex-col">
         <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">

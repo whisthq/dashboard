@@ -3,6 +3,8 @@ import Extensions from '../components/extensions'
 import Network from '../components/network'
 import Template from '../components/template'
 import Users from '../components/users'
+import Protection from '../components/protection'
+
 import { navigation } from '../constants/navigation'
 
 export default () => {
@@ -10,8 +12,9 @@ export default () => {
 
   const nameToBody = {
     Users: <Users />,
-    "Network Logs": <Network />,
-    Extensions: <Extensions />
+    'Network Logs': <Network />,
+    Extensions: <Extensions />,
+    Protection: <Protection />,
   } as any
 
   const onClick = (index: number) => {
