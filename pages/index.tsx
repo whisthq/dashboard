@@ -80,6 +80,7 @@ export const getServerSideProps = withPageAuthRequired({
 
     const session = getSession(ctx.req, ctx.res)
     const orgId = session?.user.org_id
+    console.log("orgid " + orgId)
     const policy = await loadPolicy(orgId)
     const members = await auth0().organizations.getMembers({ id: orgId })
     const withRoles = await Promise.all(
@@ -103,7 +104,7 @@ export const getServerSideProps = withPageAuthRequired({
     return {
       props: {
         authorized: true,
-        policy: JSON.parse(JSON.stringify(policy?.policy)),
+        policy: policy != null ? JSON.parse(JSON.stringify(policy?.policy)) : {},
         members: withRoles,
       },
     }
