@@ -4,14 +4,13 @@ import { users } from '../constants/users'
 import { OrganizationMember } from 'auth0'
 
 export default function Users({ members }: { members: OrganizationMember[] }) {
-  console.log(members)
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState(0)
 
   const onClick = (index: number) => {
     setOpen(true)
-    setSelected(index)
-  }
+    setSelected(index) 
+  } 
 
   return (
     <div>
@@ -57,7 +56,7 @@ export default function Users({ members }: { members: OrganizationMember[] }) {
                             Email
                           </dt>
                           <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                            {users[selected].email}
+                          {users[selected].email}
                           </dd>
                         </div>
                         <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
@@ -65,7 +64,7 @@ export default function Users({ members }: { members: OrganizationMember[] }) {
                             Last IP
                           </dt>
                           <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                            {users[selected].ip}
+                          {users[selected].ip}
                           </dd>
                         </div>
                         <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
@@ -73,7 +72,7 @@ export default function Users({ members }: { members: OrganizationMember[] }) {
                             Last Active
                           </dt>
                           <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                            {users[selected].timestamp}
+                          {users[selected].timestamp}
                           </dd>
                         </div>
                         <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
@@ -81,11 +80,7 @@ export default function Users({ members }: { members: OrganizationMember[] }) {
                             Extensions
                           </dt>
                           <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                            {users[selected].extensions.map(
-                              (extension, index) => (
-                                <div key={index}>{extension}</div>
-                              )
-                            )}
+                            {users[selected].extensions.map((extension) => <div>{extension}</div>)}
                           </dd>
                         </div>
                         <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
@@ -162,7 +157,8 @@ export default function Users({ members }: { members: OrganizationMember[] }) {
                     <th
                       scope="col"
                       className="relative py-3.5 pl-3 pr-4 sm:pr-6"
-                    ></th>
+                    >
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">

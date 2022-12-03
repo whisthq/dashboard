@@ -1,23 +1,18 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 
-import { logs } from '../constants/network'
+import { extensions } from '../constants/extensions'
 
-const Network = () => {
+export default () => {
   return (
     <div>
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <p className="mt-2 text-sm text-gray-700">
-            A list of all network activity originating from Whist browser.
+            A list of all extensions installed in Whist across your organization.
           </p>
         </div>
         <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <button
-            type="button"
-            className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
-          >
-            Refresh
-          </button>
+          Total Extensions: 16
         </div>
       </div>
       <div className="flex flex-1 mt-4 border-bottom">
@@ -39,14 +34,14 @@ const Network = () => {
               name="mobile-search-field"
               id="mobile-search-field"
               className="h-full w-full border-transparent py-2 pl-8 pr-3 text-base text-gray-900 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0 sm:hidden"
-              placeholder="Search logs"
+              placeholder="Search extensions"
               type="search"
             />
             <input
               name="desktop-search-field"
               id="desktop-search-field"
               className="hidden h-full w-full border-transparent py-2 pl-8 pr-3 text-sm text-gray-900 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0 sm:block"
-              placeholder="Search logs"
+              placeholder="Search extensions"
               type="search"
             />
           </div>
@@ -63,64 +58,55 @@ const Network = () => {
                       scope="col"
                       className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                     >
-                      Date
+                      Name
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      URL
+                      Users
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Method
+                      Source
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Status
+                      Extension ID
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      User
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      Origin
+                      Permissions
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {logs.map((log, index) => (
-                    <tr key={log.date}>
+                  {extensions.map((extension) => (
+                    <tr key={extension.id}>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
-                          {log.date}
+                          {extension.name}
                         </span>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         <span className="inline-flex rounded-full bg-blue-100 px-2 text-xs font-semibold leading-5 text-blue-800">
-                          {log.url}
+                          {extension.users}
                         </span>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {log.method}
+                        {extension.source}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {log.status}
+                        {extension.id}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {log.email}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {log.ip}
+                        {extension.permissions.map((permission) => <div>{permission}</div>)}
                       </td>
                     </tr>
                   ))}
@@ -133,5 +119,3 @@ const Network = () => {
     </div>
   )
 }
-
-export default Network
