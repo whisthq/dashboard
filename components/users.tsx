@@ -1,9 +1,8 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { users } from '../constants/users'
-import { OrganizationMember } from 'auth0'
 
-export default function Users({ members }: { members: OrganizationMember[] }) {
+export default function Users() {
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState(0)
 
@@ -80,7 +79,7 @@ export default function Users({ members }: { members: OrganizationMember[] }) {
                             Extensions
                           </dt>
                           <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                            {users[selected].extensions.map((extension) => <div>{extension}</div>)}
+                            {users[selected].extensions.map((extension, index) => <div key={index}>{extension}</div>)}
                           </dd>
                         </div>
                         <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">

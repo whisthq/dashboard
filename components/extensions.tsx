@@ -2,7 +2,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 
 import { extensions } from '../constants/extensions'
 
-export default () => {
+export default function Extensions() {
   return (
     <div>
       <div className="sm:flex sm:items-center">
@@ -106,7 +106,7 @@ export default () => {
                         {extension.id}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {extension.permissions.map((permission) => <div>{permission}</div>)}
+                        {extension.permissions.map((permission, index) => <div key={index}>{permission}</div>)}
                       </td>
                     </tr>
                   ))}

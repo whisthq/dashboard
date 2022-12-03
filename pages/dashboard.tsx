@@ -6,10 +6,11 @@ import PolicyDisplay from '../components/policy'
 import { navigation } from '../constants/navigation'
 import { Policy } from '../lib/types'
 import { OrganizationMember } from 'auth0'
+import Extensions from '../components/extensions'
+import Protection from '../components/protection'
 
 const Dashboard = ({
   policy,
-  members,
 }: {
   policy: Policy
   members: OrganizationMember[]
@@ -17,9 +18,11 @@ const Dashboard = ({
   const [current, setCurrent] = useState(1)
 
   const nameToBody: { [page: string]: JSX.Element } = {
-    Users: <Users members={members} />,
+    Users: <Users />,
     'Network Logs': <Network />,
     Policies: <PolicyDisplay policy={policy} />,
+    Extensions: <Extensions />,
+    Protection: <Protection />,
   }
 
   const onClick = (index: number) => {

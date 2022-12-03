@@ -1,4 +1,3 @@
-import { Fragment } from 'react'
 import { Formik, Form, Field } from 'formik'
 
 import { Policy } from '../lib/types'

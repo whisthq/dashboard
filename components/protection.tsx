@@ -1,4 +1,4 @@
-import { Dialog, Switch, Transition } from '@headlessui/react'
+import {  Switch } from '@headlessui/react'
 import { useState } from 'react'
 import classNames from 'classnames'
 
@@ -10,10 +10,8 @@ const people = [
     { id: 5, name: 'All Links' },
   ]
 
-export default () => {
+export default function Protection() {
   const [automaticTimezoneEnabled, setAutomaticTimezoneEnabled] = useState(true)
-  const [autoUpdateApplicantDataEnabled, setAutoUpdateApplicantDataEnabled] =
-    useState(false)
 
   return (
     <div>
@@ -162,7 +160,7 @@ export default () => {
                         defaultValue="Canada"
                     >
                         <option>Isolate</option>
-                        <option>Don't Isolate</option>
+                        <option>Don&rsquot Isolate</option>
                     </select>
                 </span>
               </dd>

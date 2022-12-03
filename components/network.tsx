@@ -2,7 +2,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 
 import { logs } from '../constants/network'
 
-const Network = () => {
+export default function Network() {
   return (
     <div>
       <div className="sm:flex sm:items-center">
@@ -98,7 +98,7 @@ const Network = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {logs.map((log, index) => (
+                  {logs.map((log) => (
                     <tr key={log.date}>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
@@ -133,5 +133,3 @@ const Network = () => {
     </div>
   )
 }
-
-export default Network
