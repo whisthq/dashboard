@@ -22,6 +22,11 @@ const globalPolicy: Policy = {
   CookiesAllowedForUrls: ['http://www.example.com', '[*.]example.edu'],
   CookiesBlockedForUrls: ['http://www.example.com', '[*.]example.edu'],
   CookiesSessionOnlyForUrls: ['http://www.example.com', '[*.]example.edu'],
+  CopyPreventionSettings: {
+    disable: ['not-sensitive.example.com'],
+    enable: ['*'],
+    minimum_data_size: 100,
+  },
   DefaultBrowserSettingEnabled: true,
   DefaultCookiesSetting: 1,
   DefaultGeolocationSetting: 0,
