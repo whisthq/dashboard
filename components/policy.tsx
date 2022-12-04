@@ -8,6 +8,8 @@ import { DocumentPlusIcon, PencilIcon } from '@heroicons/react/20/solid'
 export default function PolicyDisplay({ policy }: { policy: Policy }) {
   const [showAddForm, setShowAddForm] = useState(false)
   const [showUpdateForm, setShowUpdateForm] = useState(false)
+  const [usePolicy, setUsePolicy] = useState(policy)
+
   return (
     <>
       <div className="lg:flex lg:items-center lg:justify-between pb-5">
@@ -63,7 +65,12 @@ export default function PolicyDisplay({ policy }: { policy: Policy }) {
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <PolicyForm policy={policy} isUpdate={false} />
+        <PolicyForm
+          policy={usePolicy}
+          isUpdate={false}
+          onPolicyUpdate={setUsePolicy}
+          showFormOnSuccess={setShowAddForm}
+        />
       </Transition>
 
       <Transition
@@ -75,14 +82,19 @@ export default function PolicyDisplay({ policy }: { policy: Policy }) {
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <PolicyForm policy={policy} isUpdate={true} />
+        <PolicyForm
+          policy={usePolicy}
+          isUpdate={true}
+          onPolicyUpdate={setUsePolicy}
+          showFormOnSuccess={setShowUpdateForm}
+        />
       </Transition>
 
       {!showAddForm && !showUpdateForm ? (
         <div className="overflow-hidden bg-white shadow sm:rounded-lg">
           <div className="border-t border-gray-200">
             <div>
-              {Object.entries(policy).map(([k, v]) => {
+              {Object.entries(usePolicy).map(([k, v]) => {
                 return typeof v == 'boolean' ? (
                   <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <div className="text-sm font-medium text-gray-900">{k}</div>

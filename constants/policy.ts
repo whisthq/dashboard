@@ -107,6 +107,7 @@ const globalPolicy: Policy = {
   SafeBrowsingEnabled: true,
   SavingBrowserHistoryDisabled: true,
   SearchSuggestEnabled: true,
+  SharedClipboardEnabled: true,
   ShowHomeButton: true,
   SyncDisabled: true,
   TranslateEnabled: false,
